@@ -1,25 +1,25 @@
-from utility.facebook import get_facebook, get_parameter, get_facebook_base_url, get_facebook_application
-from domain import FacebookDomains
+from utility.google import get_google, get_parameter, get_google_base_url, get_google_application
+from domain import GoogleDomains
 from tinydb import TinyDB, Query
 
 
 applications = TinyDB("data/applications.json", indent=4)
-db = FacebookDomains()
+db = GoogleDomains()
 
 
-# Get the Facebook applications information
-def get_facebook_applications(domains, update=False):
+# Get the Google applications information
+def get_google_applications(domains, update=False):
     for domain in domains:
         try:
             name = domain["domain"]
             if not applications.search(Query().domain == name) or update:
                 # Get the authorization URL
-                facebook = get_facebook(domain)
-                url = get_facebook_base_url(facebook.get("authorization_url"))
+                google = get_google(domain)
+                url = get_google_base_url(google.get("authorization_url"))
 
                 # Get information about the application
                 app_id = get_parameter(url, "client_id")
-                application = get_facebook_application(app_id)
+                application = get_google_application(app_id)
                 if application:
                     app_domain = {"domain": name, "application": application}
                     applications.upsert(app_domain, Query().domain == name)
@@ -30,7 +30,7 @@ def get_facebook_applications(domains, update=False):
 
 def main():
     domains = db.get_attack_domains()
-    get_facebook_applications(domains)
+    get_google_applications(domains)
 
 
 if __name__ == "__main__":
