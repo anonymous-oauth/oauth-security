@@ -164,11 +164,11 @@ class FacebookDomains(Domains):
 
 class GoogleDomains(Domains):
 
-    BASE = (Query().name == "google.com") # & (Query().registration_error == False)
+    BASE = (Query().name == "google.com") & (Query().registration_error == False)
     AUTH_URL = Query().authorization_url
     MARKER_URL = Query().marker_url & (Query().marker_url != None)
     CODE_FLOW = Query().oauth_flow & (Query().oauth_flow.test(lambda x: is_code_flow(x)))
-    AUTH_ERR = Query().authorization_error #& (Query().authorization_error != None)
+    AUTH_ERR = Query().authorization_error & (Query().authorization_error != None)
     MARKER = Query().marker & (Query().marker != None)
     AUTH_RESP = Query().authorization_response
     VULNERABLE_1 = Query().vulnerable_1
