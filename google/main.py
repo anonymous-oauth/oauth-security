@@ -1,11 +1,10 @@
 import unittest
 from selenium.webdriver.support import expected_conditions as ec
-from domain import GoogleDomains, FacebookDomains
+from domain import GoogleDomains
 from parameterized import parameterized
-from provider import Google, Facebook
+from provider import Google
 from driver import Driver
 from utility.data import Data, Attacker, Victim
-from utility.facebook import is_facebook_login
 from utility.google import is_google_login
 from utility.utility import get_parameter, replace_parameter, remove_parameter, get_random_permutation
 from utility.google import get_flow, is_code_flow, is_google_login
@@ -30,12 +29,9 @@ class TestBase(unittest.TestCase):
         self.domain = None
         self.test_name = None
         self.driver = Driver(headless=headless_mode)
-        #logging.info("creating driver")
 
     def tearDown(self):
-        #logging.info("Let's keep the driver for ever!")
         self.driver.quit()
-        #time.sleep(400)
 
 
 # Class containing all the Google tests
@@ -86,13 +82,6 @@ class GoogleTest(TestBase):
         self.google.switch_back_window(forced=False)
         google.driver.save_login_cookies(self.domain['domain'])
 
-        '''
-        # Perform the authorization step if needed
-        error = google.authorize(user.password)
-        if save_data:
-            self.database.save_value(self.domain, "authorization_error", error)
-        self.assertFalse(bool(error), msg=f"Authorization error: {error}")
-        '''
     # Perform the Facebook login for the domain
     def login(self, user):
         self.authorize(user, self.google)
@@ -171,17 +160,6 @@ class GoogleTest(TestBase):
             driver.save_requests(self.test_name, f"{Victim.name}_{self.domain['domain']}")
             driver.quit()
 
-    '''
-    # Check if the marker information is visible without a login
-    @parameterized.expand(test_domains(GoogleDomains().get_marker_url()))
-    def _test_marker_information(self, _, domain):
-        # Reach the marker page
-        error = self.google.reach_marker_page(domain)
-        self.assertIsNone(error, msg=error)
-        # Return the marker found in the landing page
-        marker = self.database.get_marker(self.driver.page_source, Attacker.markers)
-        self.assertIsNone(marker, msg="Marker found")
-    '''
     @parameterized.expand(
         test_domains(GoogleDomains().get_all()),
         skip_on_empty=True
@@ -194,7 +172,6 @@ class GoogleTest(TestBase):
 
     @parameterized.expand(
         test_domains(GoogleDomains().get_login_domains()),
-        # test_domains(FacebookDomains().get_login(Victim)),
         skip_on_empty=True
     )
     def _test_login(self, _, domain):
@@ -219,7 +196,6 @@ class GoogleTest(TestBase):
         self.attack(authorization_url)
     
     @parameterized.expand(
-        # test_domains(FacebookDomains().get_attack_incomplete("2v", with_state=True)),
         test_domains(GoogleDomains().get_attack_domains(state=True)),
         skip_on_empty=True
     )
