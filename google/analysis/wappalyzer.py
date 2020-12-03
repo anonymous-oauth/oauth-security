@@ -1,4 +1,4 @@
-from domain import FacebookDomains
+from domain import FacebookDomains, GoogleDomains
 from tinydb import TinyDB, Query
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,7 +12,7 @@ api_key = "..."
 
 
 def get_data():
-    database = FacebookDomains()
+    database = GoogleDomains()
     domains = database.get_attack_domains()
     for domain in domains:
         domain_name = domain["domain"]

@@ -32,7 +32,7 @@ Attacker = User(
     "attacker@anonymous.com",
     "password",
     ["1", "2", "3"],
-    "facebook_cookies"
+    "google_cookies"
 )
 
 Victim = User(
@@ -40,5 +40,5 @@ Victim = User(
     "victim@anonymous.com",
     "password",
     ["1", "2", "3"],
-    "facebook_victim_cookies"
+    "google_victim_cookies"
 )
